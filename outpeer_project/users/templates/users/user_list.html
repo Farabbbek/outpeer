@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список пользователей</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 20px; }
+        table { width: 80%; margin: 20px auto; border-collapse: collapse; }
+        th, td { border: 1px solid black; padding: 10px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .pagination { margin-top: 20px; }
+        .pagination a { margin: 0 5px; padding: 5px 10px; background: blue; color: white; text-decoration: none; }
+        .pagination a:hover { background: darkblue; }
+        .current { font-weight: bold; margin: 0 10px; }
+    </style>
+</head>
+<body>
+    <h1>Список пользователей</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Имя пользователя</th>
+                <th>Email</th>
+                <th>Роль</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in page_obj %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.role }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Нет пользователей</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; Первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Назад</a>
+            {% endif %}
+
+            <span class="current">
+                Страница <strong>{{ page_obj.number }}</strong> из <strong>{{ page_obj.paginator.num_pages }}</strong>.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Вперед</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</body>
+</html>
