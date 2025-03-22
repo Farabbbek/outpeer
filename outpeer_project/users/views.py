@@ -6,6 +6,9 @@ from django.contrib.auth import get_user_model
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.core.paginator import Paginator
+from courses.models import Course
+
+
 
 User = get_user_model() 
 
@@ -58,8 +61,17 @@ def confirm(request):
     return render(request, 'users/confirm.html')
 
 def user_list(request):
-    users = User.objects.all()
-    paginator = Paginator(users, 20)  
+    users = User.objects.prefetch_related('enrolled_courses').all()
+    paginator = Paginator(users, 20)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'users/user_list.html', {'page_obj': page_obj})  
+   
+    return render(request, 'users/user_list.html', {'page_obj': page_obj})
+
+def course_list(request):
+    courses = Course.objects.all().order_by('name')
+    paginator = Paginator(courses, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'courses/courses_list.html', {'page_obj': page_obj})
