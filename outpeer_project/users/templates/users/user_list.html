@@ -13,13 +13,18 @@
         .pagination a { margin: 0 5px; padding: 5px 10px; background: blue; color: white; text-decoration: none; }
         .pagination a:hover { background: darkblue; }
         .current { font-weight: bold; margin: 0 10px; }
+        .back-btn { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #ccc; color: black; text-decoration: none; border-radius: 5px; }
+        .back-btn:hover { background: #bbb; }
     </style>
 </head>
 <body>
     <h1>Список пользователей</h1>
-    <button onclick="window.history.back()">Назад</button>
+    <a href="{% url 'courses_list' %}" class="back-btn">Назад</a>
     <a href="{% url 'courses_list' %}" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: green; color: white; text-decoration: none; border-radius: 5px;">
         Просмотр курсов
+    </a>
+    <a href="{% url 'lessons_list' %}" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background: orange; color: white; text-decoration: none; border-radius: 5px;">
+        Все уроки
     </a>
     <table>
         <thead>
@@ -28,7 +33,7 @@
                 <th>Имя пользователя</th>
                 <th>Email</th>
                 <th>Роль</th>
-                <th>Курсы</th> 
+                <th>Курсы</th>
             </tr>
         </thead>
         <tbody>
@@ -37,7 +42,13 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
-                    <td>{{ user.role }}</td>
+                    <td>
+                        {% if user.is_staff %}
+                            admin
+                        {% else %}
+                            student
+                        {% endif %}
+                    </td>
                     <td>
                         {% for course in user.enrolled_courses.all %}
                             {{ course.title }}{% if not forloop.last %}, {% endif %}
@@ -52,13 +63,12 @@
                 </tr>
             {% endfor %}
         </tbody>
-        
     </table>
 
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; Первая</a>
+                <a href="?page=1">« Первая</a>
                 <a href="?page={{ page_obj.previous_page_number }}">Назад</a>
             {% endif %}
 
@@ -68,7 +78,7 @@
 
             {% if page_obj.has_next %}
                 <a href="?page={{ page_obj.next_page_number }}">Вперед</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Последняя »</a>
             {% endif %}
         </span>
     </div>

@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'rest_framework',
     'courses',
+    'lessons.apps.LessonsConfig',
 ]
 
 REST_FRAMEWORK = {

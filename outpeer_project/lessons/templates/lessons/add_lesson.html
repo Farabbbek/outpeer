@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить урок</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 20px; }
+        form { width: 50%; margin: 0 auto; }
+        input, textarea { width: 100%; padding: 8px; margin: 5px 0; }
+        button { padding: 5px 10px; margin: 5px; cursor: pointer; }
+        .save-btn { background-color: #4CAF50; color: white; border: none; }
+        .cancel-btn { background-color: #ccc; border: none; }
+    </style>
+</head>
+<body>
+    <h1>Добавить урок для курса: {{ course.title }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="title">Название урока:</label><br>
+        <input type="text" id="title" name="title" required><br>
+        <label for="content">Содержание:</label><br>
+        <textarea id="content" name="content" required></textarea><br>
+        <label for="material_url">URL материала (опционально):</label><br>
+        <input type="text" id="material_url" name="material_url"><br>
+        <button type="submit" class="save-btn">Сохранить</button>
+        <a href="{% url 'lessons-by-course' course.id %}"><button type="button" class="cancel-btn">Отмена</button></a>
+    </form>
+</body>
+</html>
